@@ -177,8 +177,8 @@ class PluginTemplateFunctionalLifecycleManager(BaseLifecycleManager):
                 "messages": {},
                 "required_services": {
                     # TODO: Define which BrainDrive services your plugin requires
-                    "api": {"methods": ["get", "post", "put", "delete"], "version": "1.0.0"},
-                    "theme": {"methods": ["getCurrentTheme", "addThemeChangeListener", "removeThemeChangeListener"], "version": "1.0.0"},
+                    "api": {"methods": ["get", "post", "put", "delete", "postStreaming"], "version": "1.0.0"},
+                    "theme": {"methods": ["getCurrentTheme", "setTheme", "toggleTheme", "addThemeChangeListener", "removeThemeChangeListener"], "version": "1.0.0"},
                     "settings": {"methods": ["getSetting", "setSetting", "getSettingDefinitions"], "version": "1.0.0"},
                     "event": {"methods": ["sendMessage", "subscribeToMessages", "unsubscribeFromMessages"], "version": "1.0.0"},
                     "pageContext": {"methods": ["getCurrentPageContext", "onPageContextChange"], "version": "1.0.0"}
