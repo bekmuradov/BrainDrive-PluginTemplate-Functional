@@ -1,0 +1,347 @@
+.overview-tab {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Hero Section */
+.overview-hero {
+  text-align: center;
+  padding: 32px 16px;
+  background: linear-gradient(135deg, var(--accent-color, #0d6efd) 0%, var(--accent-hover, #0b5ed7) 100%);
+  border-radius: 12px;
+  color: white;
+  margin-bottom: 32px;
+}
+
+.overview-hero h2 {
+  margin: 0 0 12px 0;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.overview-subtitle {
+  font-size: 16px;
+  margin: 0;
+  opacity: 0.95;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Sections */
+.overview-section {
+  margin-bottom: 40px;
+}
+
+.overview-section h3 {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary, #212529);
+  margin: 0 0 16px 0;
+}
+
+.overview-section p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-secondary, #6c757d);
+  margin: 0 0 16px 0;
+}
+
+/* Benefits List */
+.overview-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.overview-benefits li {
+  padding: 12px 16px;
+  background-color: var(--bg-secondary, #f8f9fa);
+  border-left: 4px solid var(--accent-color, #0d6efd);
+  border-radius: 4px;
+  font-size: 15px;
+  color: var(--text-primary, #212529);
+}
+
+/* Service Grid */
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.service-card {
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid var(--border-color, #dee2e6);
+  background-color: var(--bg-primary, #ffffff);
+  transition: all 0.2s ease;
+}
+
+.service-card.available {
+  border-color: var(--success-color, #198754);
+}
+
+.service-card.unavailable {
+  opacity: 0.6;
+  border-color: var(--border-color, #dee2e6);
+}
+
+.service-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.service-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.service-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.service-info {
+  flex: 1;
+}
+
+.service-info h4 {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary, #212529);
+}
+
+.service-status {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.status-available {
+  background-color: var(--success-bg, #d1e7dd);
+  color: var(--success-color, #0f5132);
+}
+
+.status-unavailable {
+  background-color: var(--bg-secondary, #e9ecef);
+  color: var(--text-secondary, #6c757d);
+}
+
+.service-description {
+  font-size: 14px;
+  color: var(--text-secondary, #6c757d);
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+}
+
+.service-methods {
+  font-size: 13px;
+}
+
+.service-methods strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--text-primary, #212529);
+}
+
+.service-methods ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.service-methods li {
+  background-color: var(--bg-secondary, #f8f9fa);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.service-methods code {
+  font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+  color: var(--text-primary, #212529);
+}
+
+/* Note */
+.overview-note {
+  padding: 12px 16px;
+  background-color: var(--info-bg, #cff4fc);
+  border-left: 4px solid var(--info-color, #0dcaf0);
+  border-radius: 4px;
+  font-size: 14px;
+  margin-top: 16px;
+}
+
+/* Next Steps */
+.overview-next-steps {
+  background-color: var(--bg-secondary, #f8f9fa);
+  padding: 24px;
+  border-radius: 12px;
+}
+
+.next-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.next-step-card {
+  text-align: center;
+  padding: 20px 16px;
+  background-color: var(--bg-primary, #ffffff);
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #dee2e6);
+  transition: all 0.2s ease;
+}
+
+.next-step-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--accent-color, #0d6efd);
+}
+
+.next-step-icon {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.next-step-card strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 15px;
+  color: var(--text-primary, #212529);
+}
+
+.next-step-card p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary, #6c757d);
+}
+
+/* Documentation Links */
+.overview-docs {
+  border-top: 2px solid var(--border-color, #dee2e6);
+  padding-top: 24px;
+}
+
+.overview-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.overview-links li {
+  padding: 0;
+}
+
+.overview-links a {
+  display: block;
+  padding: 10px 16px;
+  background-color: var(--bg-secondary, #f8f9fa);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--accent-color, #0d6efd);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.overview-links a:hover {
+  background-color: var(--accent-color, #0d6efd);
+  color: white;
+  transform: translateX(4px);
+}
+
+/* Dark Theme */
+.dark-theme .overview-benefits li {
+  background-color: var(--bg-secondary, #2d3748);
+  border-left-color: var(--accent-color, #63b3ed);
+  color: var(--text-primary, #f7fafc);
+}
+
+.dark-theme .service-card {
+  background-color: var(--bg-primary, #1a202c);
+  border-color: var(--border-color, #4a5568);
+}
+
+.dark-theme .service-card.available {
+  border-color: var(--success-color, #48bb78);
+}
+
+.dark-theme .service-info h4 {
+  color: var(--text-primary, #f7fafc);
+}
+
+.dark-theme .service-methods strong {
+  color: var(--text-primary, #f7fafc);
+}
+
+.dark-theme .service-methods li {
+  background-color: var(--bg-secondary, #2d3748);
+}
+
+.dark-theme .service-methods code {
+  color: var(--text-primary, #f7fafc);
+}
+
+.dark-theme .overview-next-steps {
+  background-color: var(--bg-secondary, #2d3748);
+}
+
+.dark-theme .next-step-card {
+  background-color: var(--bg-primary, #1a202c);
+  border-color: var(--border-color, #4a5568);
+}
+
+.dark-theme .next-step-card:hover {
+  border-color: var(--accent-color, #63b3ed);
+}
+
+.dark-theme .next-step-card strong {
+  color: var(--text-primary, #f7fafc);
+}
+
+.dark-theme .overview-links a {
+  background-color: var(--bg-secondary, #2d3748);
+  color: var(--accent-color, #63b3ed);
+}
+
+.dark-theme .overview-links a:hover {
+  background-color: var(--accent-color, #63b3ed);
+  color: var(--bg-primary, #1a202c);
+}
+
+.dark-theme .overview-docs {
+  border-top-color: var(--border-color, #4a5568);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .overview-hero h2 {
+    font-size: 24px;
+  }
+
+  .overview-subtitle {
+    font-size: 14px;
+  }
+
+  .service-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .next-steps-grid {
+    grid-template-columns: 1fr;
+  }
+}

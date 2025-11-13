@@ -1,0 +1,105 @@
+.event-service-tab {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Subscribe Control */
+.subscribe-control {
+  margin: 20px 0;
+  padding: 16px;
+  background-color: var(--bg-secondary, #f8f9fa);
+  border-radius: 8px;
+}
+
+/* Message Feed */
+.message-feed {
+  margin: 20px 0;
+  padding: 20px;
+  background-color: var(--bg-secondary, #f8f9fa);
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #dee2e6);
+}
+
+.message-feed h4 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary, #212529);
+}
+
+.empty-state {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--text-secondary, #6c757d);
+  font-size: 14px;
+}
+
+/* Message Card */
+.message-card {
+  margin-bottom: 12px;
+  padding: 12px;
+  background-color: var(--bg-primary, #ffffff);
+  border-radius: 6px;
+  border: 1px solid var(--border-color, #dee2e6);
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color, #dee2e6);
+}
+
+.message-channel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-color, #0d6efd);
+}
+
+.message-time {
+  font-size: 12px;
+  color: var(--text-secondary, #6c757d);
+}
+
+.message-content {
+  margin: 0;
+  padding: 8px;
+  background-color: var(--code-bg, #f6f8fa);
+  border-radius: 4px;
+  font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--code-text, #24292f);
+  overflow-x: auto;
+}
+
+/* Dark Theme */
+.dark-theme .subscribe-control,
+.dark-theme .message-feed {
+  background-color: var(--bg-secondary, #2d3748);
+  border-color: var(--border-color, #4a5568);
+}
+
+.dark-theme .message-feed h4 {
+  color: var(--text-primary, #f7fafc);
+}
+
+.dark-theme .message-card {
+  background-color: var(--bg-primary, #1a202c);
+  border-color: var(--border-color, #4a5568);
+}
+
+.dark-theme .message-header {
+  border-bottom-color: var(--border-color, #4a5568);
+}
+
+.dark-theme .message-channel {
+  color: var(--accent-color, #63b3ed);
+}
+
+.dark-theme .message-content {
+  background-color: var(--code-bg, #161b22);
+  color: var(--code-text, #c9d1d9);
+}

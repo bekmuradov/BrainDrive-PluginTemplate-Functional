@@ -1,0 +1,118 @@
+.settings-service-tab {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Settings Control */
+.setting-control {
+  margin: 20px 0;
+}
+
+/* Toggle Switch */
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+  background-color: var(--bg-secondary, #ccc);
+  border-radius: 24px;
+  transition: background-color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.toggle-slider::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.toggle-checkbox:checked + .toggle-slider {
+  background-color: var(--success-color, #198754);
+}
+
+.toggle-checkbox:checked + .toggle-slider::after {
+  transform: translateX(24px);
+}
+
+.toggle-checkbox:disabled + .toggle-slider {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.toggle-text {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary, #212529);
+}
+
+/* Settings Form */
+.settings-form {
+  background-color: var(--bg-secondary, #f8f9fa);
+  padding: 24px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.demo-select {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-primary, #212529);
+  background-color: var(--bg-primary, #ffffff);
+  border: 1px solid var(--border-color, #dee2e6);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.demo-select:focus {
+  outline: none;
+  border-color: var(--accent-color, #0d6efd);
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+}
+
+/* Dark Theme */
+.dark-theme .toggle-text {
+  color: var(--text-primary, #f7fafc);
+}
+
+.dark-theme .toggle-slider {
+  background-color: var(--bg-secondary, #4a5568);
+}
+
+.dark-theme .settings-form {
+  background-color: var(--bg-secondary, #2d3748);
+}
+
+.dark-theme .demo-select {
+  background-color: var(--bg-primary, #1a202c);
+  border-color: var(--border-color, #4a5568);
+  color: var(--text-primary, #f7fafc);
+}
+
+.dark-theme .demo-select:focus {
+  border-color: var(--accent-color, #63b3ed);
+  box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.1);
+}

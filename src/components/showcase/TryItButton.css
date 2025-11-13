@@ -1,0 +1,96 @@
+.try-it-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.try-it-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.try-it-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+}
+
+.try-it-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.try-it-icon {
+  font-size: 16px;
+}
+
+.try-it-spinner {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Variants */
+.try-it-button-primary {
+  background-color: var(--accent-color, #0d6efd);
+  color: white;
+}
+
+.try-it-button-primary:hover:not(:disabled) {
+  background-color: var(--accent-hover, #0b5ed7);
+}
+
+.try-it-button-secondary {
+  background-color: var(--bg-secondary, #6c757d);
+  color: white;
+}
+
+.try-it-button-secondary:hover:not(:disabled) {
+  background-color: var(--bg-secondary-hover, #5c636a);
+}
+
+.try-it-button-success {
+  background-color: var(--success-color, #198754);
+  color: white;
+}
+
+.try-it-button-success:hover:not(:disabled) {
+  background-color: var(--success-hover, #157347);
+}
+
+.try-it-button-danger {
+  background-color: var(--danger-color, #dc3545);
+  color: white;
+}
+
+.try-it-button-danger:hover:not(:disabled) {
+  background-color: var(--danger-hover, #bb2d3b);
+}
+
+/* Dark theme */
+.dark-theme .try-it-button-primary {
+  background-color: var(--accent-color, #0d6efd);
+}
+
+.dark-theme .try-it-button-secondary {
+  background-color: var(--bg-secondary, #495057);
+}
+
+.dark-theme .try-it-button-success {
+  background-color: var(--success-color, #198754);
+}
+
+.dark-theme .try-it-button-danger {
+  background-color: var(--danger-color, #dc3545);
+}

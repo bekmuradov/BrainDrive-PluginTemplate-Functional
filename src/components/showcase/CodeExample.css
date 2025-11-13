@@ -1,0 +1,130 @@
+.code-example {
+  position: relative;
+  margin: 16px 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--code-bg, #f6f8fa);
+  border: 1px solid var(--border-color, #d0d7de);
+}
+
+.code-example-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: var(--code-header-bg, #e1e4e8);
+  border-bottom: 1px solid var(--border-color, #d0d7de);
+}
+
+.code-example-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary, #24292f);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.code-example-copy {
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  background-color: var(--button-bg, #ffffff);
+  color: var(--button-text, #24292f);
+  border: 1px solid var(--border-color, #d0d7de);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.code-example-copy:hover {
+  background-color: var(--button-hover-bg, #f6f8fa);
+  border-color: var(--border-hover, #8c959f);
+}
+
+.code-example-copy-inline {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 6px 10px;
+  font-size: 14px;
+}
+
+.code-example-pre {
+  margin: 0;
+  padding: 16px;
+  overflow-x: auto;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--code-text, #24292f);
+  background-color: var(--code-bg, #f6f8fa);
+}
+
+.code-example-pre code {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+}
+
+/* Dark theme support */
+.dark-theme .code-example {
+  background-color: var(--code-bg, #161b22);
+  border-color: var(--border-color, #30363d);
+}
+
+.dark-theme .code-example-header {
+  background-color: var(--code-header-bg, #0d1117);
+  border-bottom-color: var(--border-color, #30363d);
+}
+
+.dark-theme .code-example-title {
+  color: var(--text-primary, #c9d1d9);
+}
+
+.dark-theme .code-example-copy {
+  background-color: var(--button-bg, #21262d);
+  color: var(--button-text, #c9d1d9);
+  border-color: var(--border-color, #30363d);
+}
+
+.dark-theme .code-example-copy:hover {
+  background-color: var(--button-hover-bg, #30363d);
+  border-color: var(--border-hover, #8b949e);
+}
+
+.dark-theme .code-example-pre {
+  color: var(--code-text, #c9d1d9);
+  background-color: var(--code-bg, #161b22);
+}
+
+/* Scrollbar styling */
+.code-example-pre::-webkit-scrollbar {
+  height: 8px;
+}
+
+.code-example-pre::-webkit-scrollbar-track {
+  background: var(--scrollbar-track, #f0f0f0);
+  border-radius: 4px;
+}
+
+.code-example-pre::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb, #c1c1c1);
+  border-radius: 4px;
+}
+
+.code-example-pre::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover, #a8a8a8);
+}
+
+.dark-theme .code-example-pre::-webkit-scrollbar-track {
+  background: var(--scrollbar-track, #0d1117);
+}
+
+.dark-theme .code-example-pre::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb, #30363d);
+}
+
+.dark-theme .code-example-pre::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover, #484f58);
+}

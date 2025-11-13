@@ -7,6 +7,7 @@ import {
 } from './types';
 import ErrorBoundary from './components/ErrorBoundary';
 import ErrorDisplay, { ErrorInfo } from './components/ErrorDisplay';
+import { ServiceBridgeShowcase } from './components/ServiceBridgeShowcase';
 import {
   ErrorHandler,
   PluginError,
@@ -348,87 +349,9 @@ const PluginTemplateFunctional: React.FC<PluginTemplateProps> = (props) => {
    * Render main plugin content
    */
   const renderContent = (): JSX.Element => {
-    // Page context is now available from usePageContext hook
     return (
       <div className="plugin-template-content">
-        <div className="plugin-header">
-          <h3>{title}</h3>
-          <p>{description}</p>
-        </div>
-
-        {/* Plugin Information */}
-        <div className="plugin-info">
-          <h4>Plugin Information</h4>
-          <div className="info-grid">
-            <div className="info-item">
-              <strong>Plugin ID:</strong> {pluginId || 'Not provided'}
-            </div>
-            <div className="info-item">
-              <strong>Module ID:</strong> {moduleId || 'Not provided'}
-            </div>
-            <div className="info-item">
-              <strong>Instance ID:</strong> {instanceId || 'Not provided'}
-            </div>
-            <div className="info-item">
-              <strong>Current Theme:</strong> {currentTheme}
-            </div>
-            <div className="info-item">
-              <strong>Configuration:</strong>
-              <ul>
-                <li>Refresh Interval: {config?.refreshInterval || 'Not set'}</li>
-                <li>Show Advanced Options: {config?.showAdvancedOptions ? 'Yes' : 'No'}</li>
-                <li>Custom Setting: {config?.customSetting || 'Not set'}</li>
-              </ul>
-            </div>
-            <div className="info-item">
-              <strong>Page Context:</strong>
-              <ul>
-                <li>Page ID: {pageContext?.pageId || 'Not available'}</li>
-                <li>Page Name: {pageContext?.pageName || 'Not available'}</li>
-                <li>Page Route: {pageContext?.pageRoute || 'Not available'}</li>
-                <li>Is Studio Page: {pageContext?.isStudioPage ? 'Yes' : 'No'}</li>
-              </ul>
-            </div>
-            <div className="info-item">
-              <strong>Services Available:</strong>
-              <ul>
-                <li>API: {services.api ? '✅' : '❌'}</li>
-                <li>Event: {services.event ? '✅' : '❌'}</li>
-                <li>Theme: {services.theme ? '✅' : '❌'}</li>
-                <li>Settings: {services.settings ? '✅' : '❌'}</li>
-                <li>Page Context: {services.pageContext ? '✅' : '❌'}</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        {/* Hook Pattern Example */}
-        <div className="plugin-info" style={{ marginTop: '20px' }}>
-          <h4>React Hooks Used in This Component</h4>
-          <div className="info-grid">
-            <div className="info-item">
-              <strong>State Management:</strong>
-              <ul>
-                <li>useState - for component state (loading, error, theme, etc.)</li>
-                <li>useRef - for mutable values (retryCount, listeners)</li>
-              </ul>
-            </div>
-            <div className="info-item">
-              <strong>Side Effects:</strong>
-              <ul>
-                <li>useEffect - for initialization and cleanup</li>
-                <li>Dependencies properly managed to prevent infinite loops</li>
-              </ul>
-            </div>
-            <div className="info-item">
-              <strong>Performance:</strong>
-              <ul>
-                <li>useCallback - memoized event handlers</li>
-                <li>Prevents unnecessary re-renders</li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        <ServiceBridgeShowcase services={services} errorHandler={errorHandler} />
       </div>
     );
   };

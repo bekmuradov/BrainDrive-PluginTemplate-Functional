@@ -1,0 +1,194 @@
+.result-display {
+  margin: 16px 0;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #dee2e6);
+  background-color: var(--bg-primary, #ffffff);
+  overflow: hidden;
+}
+
+.result-display-title {
+  padding: 10px 16px;
+  background-color: var(--bg-secondary, #f8f9fa);
+  border-bottom: 1px solid var(--border-color, #dee2e6);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-primary, #212529);
+}
+
+.result-display-content {
+  padding: 16px;
+}
+
+/* Variants */
+.result-display-success {
+  border-color: var(--success-color, #198754);
+}
+
+.result-display-success .result-display-title {
+  background-color: var(--success-bg, #d1e7dd);
+  color: var(--success-color, #0f5132);
+  border-bottom-color: var(--success-color, #198754);
+}
+
+.result-display-error {
+  border-color: var(--danger-color, #dc3545);
+}
+
+.result-display-error .result-display-title {
+  background-color: var(--danger-bg, #f8d7da);
+  color: var(--danger-color, #842029);
+  border-bottom-color: var(--danger-color, #dc3545);
+}
+
+.result-display-info {
+  border-color: var(--info-color, #0dcaf0);
+}
+
+.result-display-info .result-display-title {
+  background-color: var(--info-bg, #cff4fc);
+  color: var(--info-color, #055160);
+  border-bottom-color: var(--info-color, #0dcaf0);
+}
+
+/* Loading state */
+.result-loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-secondary, #6c757d);
+  font-size: 14px;
+}
+
+.result-spinner {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Error state */
+.result-error {
+  display: flex;
+  gap: 12px;
+  color: var(--danger-color, #dc3545);
+}
+
+.result-error-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.result-error-content {
+  flex: 1;
+}
+
+.result-error-content strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.result-error-content p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-primary, #212529);
+}
+
+/* Empty state */
+.result-empty {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-secondary, #6c757d);
+  font-size: 14px;
+}
+
+.result-empty-icon {
+  font-size: 20px;
+}
+
+/* Simple data */
+.result-simple {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+  font-size: 14px;
+  color: var(--text-primary, #212529);
+  padding: 8px;
+  background-color: var(--code-bg, #f6f8fa);
+  border-radius: 4px;
+}
+
+/* JSON data */
+.result-json {
+  margin: 0;
+  padding: 12px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--code-text, #24292f);
+  background-color: var(--code-bg, #f6f8fa);
+  border-radius: 4px;
+  overflow-x: auto;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Dark theme */
+.dark-theme .result-display {
+  background-color: var(--bg-primary, #1a202c);
+  border-color: var(--border-color, #4a5568);
+}
+
+.dark-theme .result-display-title {
+  background-color: var(--bg-secondary, #2d3748);
+  border-bottom-color: var(--border-color, #4a5568);
+  color: var(--text-primary, #f7fafc);
+}
+
+.dark-theme .result-simple {
+  background-color: var(--code-bg, #161b22);
+  color: var(--text-primary, #c9d1d9);
+}
+
+.dark-theme .result-json {
+  background-color: var(--code-bg, #161b22);
+  color: var(--code-text, #c9d1d9);
+}
+
+.dark-theme .result-error-content p {
+  color: var(--text-primary, #f7fafc);
+}
+
+/* Scrollbar styling */
+.result-json::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.result-json::-webkit-scrollbar-track {
+  background: var(--scrollbar-track, #f0f0f0);
+  border-radius: 4px;
+}
+
+.result-json::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb, #c1c1c1);
+  border-radius: 4px;
+}
+
+.result-json::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover, #a8a8a8);
+}
+
+.dark-theme .result-json::-webkit-scrollbar-track {
+  background: var(--scrollbar-track, #0d1117);
+}
+
+.dark-theme .result-json::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb, #30363d);
+}
+
+.dark-theme .result-json::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover, #484f58);
+}

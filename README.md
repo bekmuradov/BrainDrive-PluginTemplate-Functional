@@ -2,7 +2,7 @@
 
 **Modern React Hooks template for BrainDrive plugin development**
 
-This is the official functional component template for [BrainDrive](https://github.com/BrainDriveAI/BrainDrive) plugins, featuring:
+This is the functional component template for [BrainDrive](https://github.com/BrainDriveAI/BrainDrive) plugins, featuring:
 
 - ✅ **React Hooks** - Modern functional components with useState, useEffect, useCallback
 - ✅ **Custom Hooks** - Reusable hooks for service integration (useTheme, useSettings, useAPI, etc.)
