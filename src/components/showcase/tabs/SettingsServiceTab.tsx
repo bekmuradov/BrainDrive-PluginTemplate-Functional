@@ -55,6 +55,10 @@ export const SettingsServiceTab: React.FC<SettingsServiceTabProps> = ({ services
           The Settings Service provides persistent storage for user preferences.
           Settings are saved automatically and persist across sessions.
         </p>
+        <div className="info-banner">
+          <strong>⚠️ Important:</strong> All settings must be registered in your plugin's <code>settingDefinitions</code>
+          in <code>lifecycle_manager.py</code> before they can be used.
+        </div>
       </div>
 
       {/* Example 1: Simple Boolean Setting */}
@@ -207,9 +211,51 @@ const handleSave = () => {
         />
       </div>
 
-      {/* Example 3: Direct Access Methods */}
+      {/* Example 3: Register Settings */}
       <div className="showcase-example">
-        <h3>Example 3: Direct Access (Without Hook)</h3>
+        <h3>Example 3: Register Settings in lifecycle_manager.py</h3>
+        <p>Before using settings, register them in your plugin's lifecycle manager.</p>
+
+        <CodeExample
+          title="Register settings in lifecycle_manager.py"
+          code={`
+# In lifecycle_manager.py, add settingDefinitions to plugin_data
+self.plugin_data = {
+    "name": "MyPlugin",
+    "version": "1.0.0",
+    # ... other fields ...
+    "settingDefinitions": [
+        {
+            "id": "plugin_notifications_enabled",
+            "name": "Enable Notifications",
+            "description": "Enable or disable plugin notifications",
+            "type": "boolean",
+            "default": False,
+            "category": "general",
+            "scope": "user"
+        },
+        {
+            "id": "plugin_preferences",
+            "name": "Plugin Preferences",
+            "description": "Complex preference settings",
+            "type": "object",
+            "default": {
+                "refreshInterval": 60000,
+                "defaultView": "grid",
+                "theme": "auto"
+            },
+            "category": "general",
+            "scope": "user"
+        }
+    ]
+}
+          `}
+        />
+      </div>
+
+      {/* Example 4: Direct Access Methods */}
+      <div className="showcase-example">
+        <h3>Example 4: Direct Access (Without Hook)</h3>
         <p>Use getSetting and setSetting methods directly for one-off operations.</p>
 
         <CodeExample

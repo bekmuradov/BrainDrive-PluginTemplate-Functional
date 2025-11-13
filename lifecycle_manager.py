@@ -124,7 +124,32 @@ class PluginTemplateFunctionalLifecycleManager(BaseLifecycleManager):
             "update_available": False,
             "latest_version": None,
             "installation_type": "remote",
-            "permissions": ["storage.read", "storage.write", "api.access"]  # TODO: Customize permissions
+            "permissions": ["storage.read", "storage.write", "api.access"],  # TODO: Customize permissions
+            # Settings definitions - register all settings that plugins can use
+            "settingDefinitions": [
+                {
+                    "id": "plugin_notifications_enabled",
+                    "name": "Enable Notifications",
+                    "description": "Enable or disable plugin notifications",
+                    "type": "boolean",
+                    "default": False,
+                    "category": "general",
+                    "scope": "user"
+                },
+                {
+                    "id": "plugin_preferences",
+                    "name": "Plugin Preferences",
+                    "description": "Complex preference settings for the plugin",
+                    "type": "object",
+                    "default": {
+                        "refreshInterval": 60000,
+                        "defaultView": "grid",
+                        "theme": "auto"
+                    },
+                    "category": "general",
+                    "scope": "user"
+                }
+            ]
         }
         
         # TEMPLATE: Define module data - TODO: Customize for your plugin's modules

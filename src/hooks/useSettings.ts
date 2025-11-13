@@ -96,7 +96,15 @@ export function useSettings<T = any>(
       } catch (err) {
         const errorMsg = `Failed to save setting '${settingKey}'`;
         console.error('useSettings:', errorMsg, err);
-        setError(errorMsg);
+
+        // Check if it's a "not found" error - provide helpful message
+        if (err instanceof Error && err.message.includes('not found')) {
+          const helpMsg = `${errorMsg} - Setting '${settingKey}' must be registered in plugin's settingDefinitions in lifecycle_manager.py`;
+          setError(helpMsg);
+          console.error('useSettings:', helpMsg);
+        } else {
+          setError(errorMsg);
+        }
         return false;
       } finally {
         setIsLoading(false);
