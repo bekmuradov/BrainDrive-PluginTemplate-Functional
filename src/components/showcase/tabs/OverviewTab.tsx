@@ -49,6 +49,13 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ services }) => {
       available: !!services.pageContext,
       description: 'Know which page the user is on and react to navigation',
       methods: ['getCurrentPageContext', 'onPageContextChange']
+    },
+    {
+      name: 'Plugin State Service',
+      icon: '💾',
+      available: !!services.pluginState,
+      description: 'Store and retrieve persistent plugin data across sessions',
+      methods: ['saveState', 'getState', 'clearState']
     }
   ];
 
@@ -75,15 +82,16 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ services }) => {
         <ul className="overview-benefits">
           <li>🎨 <strong>Adapt to theme changes</strong> (dark/light mode)</li>
           <li>🌐 <strong>Communicate with the backend</strong> (HTTP requests)</li>
-          <li>💾 <strong>Save user preferences</strong> (persistent settings)</li>
+          <li>⚙️ <strong>Save user preferences</strong> (persistent settings)</li>
           <li>📨 <strong>Talk to other plugins</strong> (inter-plugin messaging)</li>
-          <li>🗺️ <strong>Know user context</strong> (which page, what route)</li>
+          <li>📍 <strong>Know user context</strong> (which page, what route)</li>
+          <li>💾 <strong>Store plugin state</strong> (persistent data across sessions)</li>
         </ul>
       </div>
 
       {/* Service Availability */}
       <div className="overview-section">
-        <h3>Available Services ({availableCount}/5)</h3>
+        <h3>Available Services ({availableCount}/6)</h3>
         <div className="service-grid">
           {serviceList.map(service => (
             <div key={service.name} className={`service-card ${service.available ? 'available' : 'unavailable'}`}>
@@ -126,9 +134,10 @@ const MyPlugin: React.FC<PluginTemplateProps> = ({ services }) => {
   // All services are ready to use!
   // services.theme    - Theme integration
   // services.api      - HTTP requests
-  // services.settings - Persistent storage
+  // services.settings - User preferences
   // services.event    - Inter-plugin messaging
   // services.pageContext - Page information
+  // services.pluginState - Persistent plugin data
 
   // Always check if a service is available before using it
   if (services.theme) {
@@ -170,7 +179,7 @@ const MyPlugin: React.FC<PluginTemplateProps> = ({ services }) => {
         />
 
         <p className="overview-note">
-          💡 <strong>Tip:</strong> This template includes 5 custom hooks that correspond to each service bridge.
+          💡 <strong>Tip:</strong> This template includes 6 custom hooks that correspond to each service bridge.
           Check the tabs above to see them in action!
         </p>
       </div>
@@ -206,6 +215,11 @@ const MyPlugin: React.FC<PluginTemplateProps> = ({ services }) => {
             <span className="next-step-icon">📍</span>
             <strong>Page Context</strong>
             <p>Know where the user is</p>
+          </div>
+          <div className="next-step-card">
+            <span className="next-step-icon">💾</span>
+            <strong>Plugin State</strong>
+            <p>Persist data across sessions</p>
           </div>
         </div>
       </div>

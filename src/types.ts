@@ -42,6 +42,22 @@ export interface PageContextService {
   onPageContextChange(callback: (context: any) => void): () => void;
 }
 
+export interface PluginStateService {
+  configure?: (config: {
+    pluginId: string;
+    stateStrategy?: 'session' | 'persistent';
+    preserveKeys?: string[];
+    stateSchema?: any;
+    maxStateSize?: number;
+  }) => void;
+  saveState: (stateData: any) => Promise<void>;
+  getState: () => Promise<any>;
+  clearState: () => Promise<void>;
+  onSave?: (callback: (state: any) => void) => () => void;
+  onRestore?: (callback: (state: any) => void) => () => void;
+  onClear?: (callback: () => void) => () => void;
+}
+
 // Services container
 export interface Services {
   api?: ApiService;
@@ -49,6 +65,7 @@ export interface Services {
   theme?: ThemeService;
   settings?: SettingsService;
   pageContext?: PageContextService;
+  pluginState?: PluginStateService;
 }
 
 // API Response interface

@@ -11,6 +11,7 @@ export { useTheme } from './useTheme';
 export { usePageContext } from './usePageContext';
 export { useSettings, useSettingsWithValidation } from './useSettings';
 export { useAPI, useLazyAPI } from './useAPI';
+export { usePluginState } from './usePluginState';
 export { useErrorHandler } from './useErrorHandler';
 
 // Re-export types

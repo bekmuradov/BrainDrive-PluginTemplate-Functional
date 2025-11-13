@@ -11,3 +11,4 @@ export { APIServiceTab } from './tabs/APIServiceTab';
 export { SettingsServiceTab } from './tabs/SettingsServiceTab';
 export { EventServiceTab } from './tabs/EventServiceTab';
 export { PageContextServiceTab } from './tabs/PageContextServiceTab';
+export { PluginStateServiceTab } from './tabs/PluginStateServiceTab';

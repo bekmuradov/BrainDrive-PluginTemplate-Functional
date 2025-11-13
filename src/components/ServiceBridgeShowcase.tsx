@@ -8,7 +8,8 @@ import {
   APIServiceTab,
   SettingsServiceTab,
   EventServiceTab,
-  PageContextServiceTab
+  PageContextServiceTab,
+  PluginStateServiceTab
 } from './showcase';
 
 interface ServiceBridgeShowcaseProps {
@@ -62,6 +63,12 @@ export const ServiceBridgeShowcase: React.FC<ServiceBridgeShowcaseProps> = ({
       label: 'Page Context',
       icon: '📍',
       content: <PageContextServiceTab services={services} errorHandler={errorHandler} />
+    },
+    {
+      id: 'state',
+      label: 'Plugin State',
+      icon: '💾',
+      content: <PluginStateServiceTab services={services} errorHandler={errorHandler} />
     }
   ];
 
