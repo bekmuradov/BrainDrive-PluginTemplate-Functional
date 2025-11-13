@@ -16,6 +16,7 @@ import {
   ErrorSeverity,
   ErrorUtils
 } from './utils/errorHandling';
+import { useTheme } from './hooks';
 
 // TEMPLATE: Import your components here
 // import { YourComponent } from './components';
@@ -63,7 +64,6 @@ const PluginTemplateFunctional: React.FC<PluginTemplateProps> = (props) => {
   // Class equivalent: this.state = { ... }
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [currentTheme, setCurrentTheme] = useState('light');
   const [isInitializing, setIsInitializing] = useState(true);
   const [data, setData] = useState<any>(null); // TODO: Replace with your plugin's data structure
   const [lastError, setLastError] = useState<Error | null>(null);
@@ -74,7 +74,6 @@ const PluginTemplateFunctional: React.FC<PluginTemplateProps> = (props) => {
   // useRef persists values across renders without causing re-renders
   const retryCountRef = useRef(0);
   const maxRetriesRef = useRef(3);
-  const themeChangeListenerRef = useRef<((theme: string) => void) | null>(null);
   const pageContextUnsubscribeRef = useRef<(() => void) | null>(null);
   const errorHandlerRef = useRef<ErrorHandler | null>(null);
 
@@ -103,6 +102,11 @@ const PluginTemplateFunctional: React.FC<PluginTemplateProps> = (props) => {
   }
 
   const errorHandler = errorHandlerRef.current;
+
+  // USE CUSTOM HOOKS
+  // The useTheme hook handles all theme service integration automatically
+  // This replaces the manual theme listener setup and ensures proper reactivity
+  const { currentTheme } = useTheme(services.theme, errorHandler);
 
   /**
    * Handle component-level errors with comprehensive error management
@@ -164,37 +168,13 @@ const PluginTemplateFunctional: React.FC<PluginTemplateProps> = (props) => {
   /**
    * Initialize BrainDrive services with comprehensive error handling
    * Class equivalent: private async initializeServices(): Promise<void> { ... }
+   *
+   * NOTE: Theme service is now handled by useTheme hook above, which provides
+   * better reactivity and automatic cleanup. This ensures theme changes are
+   * reflected immediately without needing to refresh.
    */
   const initializeServices = useCallback(async (): Promise<void> => {
-    // Initialize theme service with error handling
-    await errorHandler.safeAsync(async () => {
-      if (services.theme) {
-        const theme = errorHandler.safeSync(
-          () => services.theme!.getCurrentTheme(),
-          'light'
-        );
-        setCurrentTheme(theme);
-
-        // Listen for theme changes with error handling
-        themeChangeListenerRef.current = (theme: string) => {
-          errorHandler.safeSync(() => {
-            setCurrentTheme(theme);
-          });
-        };
-
-        services.theme.addThemeChangeListener(themeChangeListenerRef.current);
-        console.log('PluginTemplateFunctional: Theme service initialized successfully');
-      } else {
-        console.warn('PluginTemplateFunctional: Theme service not available');
-      }
-    }, undefined, ErrorStrategy.FALLBACK).catch(error => {
-      throw new ServiceError(
-        'Failed to initialize theme service',
-        'theme',
-        'THEME_INIT_ERROR',
-        error
-      );
-    });
+    // Theme service is handled by useTheme hook - no manual setup needed!
 
     // Initialize page context service with error handling
     await errorHandler.safeAsync(async () => {
@@ -263,16 +243,11 @@ const PluginTemplateFunctional: React.FC<PluginTemplateProps> = (props) => {
   /**
    * Clean up services and listeners with error handling
    * Class equivalent: private cleanupServices(): void { ... }
+   *
+   * NOTE: Theme service cleanup is now handled by useTheme hook automatically
    */
   const cleanupServices = useCallback((): void => {
-    // Clean up theme service listener
-    errorHandler.safeSync(() => {
-      if (services.theme && themeChangeListenerRef.current) {
-        services.theme.removeThemeChangeListener(themeChangeListenerRef.current);
-        themeChangeListenerRef.current = null;
-        console.log('PluginTemplateFunctional: Theme service cleaned up');
-      }
-    });
+    // Theme service cleanup is handled by useTheme hook - no manual cleanup needed!
 
     // Clean up page context subscription
     errorHandler.safeSync(() => {
