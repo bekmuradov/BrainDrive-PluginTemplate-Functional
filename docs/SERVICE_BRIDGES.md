@@ -37,6 +37,7 @@ interface Services {
   theme?: ThemeService;      // Dark/light mode
   settings?: SettingsService; // User preferences
   pageContext?: PageContextService; // Page information
+  pluginState?: PluginStateService; // Persistent plugin storage
 }
 ```
 
@@ -206,6 +207,11 @@ const MyPlugin: React.FC<PluginProps> = ({ services }) => {
 
 Manages persistent user settings and configuration.
 
+> **⚠️ CRITICAL REQUIREMENT**: All settings MUST be registered in `lifecycle_manager.py` before use!
+>
+> Attempting to save a setting without registration will throw:
+> `Error: Setting definition <setting_id> not found`
+
 #### Interface
 
 ```typescript
@@ -218,7 +224,54 @@ interface SettingsService {
 }
 ```
 
-#### Using with Hooks
+#### Step 1: Register Settings in lifecycle_manager.py
+
+**Before using ANY setting**, you must register it in your plugin's `settingDefinitions`:
+
+```python
+# In lifecycle_manager.py
+self.plugin_data = {
+    "name": "MyPlugin",
+    "version": "1.0.0",
+    # ... other fields ...
+
+    # REQUIRED: Register all settings here
+    "settingDefinitions": [
+        {
+            "id": "plugin_notifications_enabled",  # Setting key
+            "name": "Enable Notifications",         # Display name
+            "description": "Enable or disable plugin notifications",
+            "type": "boolean",                      # boolean, string, number, object, array
+            "default": False,                       # Default value
+            "category": "general",                  # Grouping category
+            "scope": "user"                         # user-scoped or global
+        },
+        {
+            "id": "plugin_preferences",
+            "name": "Plugin Preferences",
+            "description": "Complex preference settings",
+            "type": "object",
+            "default": {
+                "refreshInterval": 60000,
+                "defaultView": "grid",
+                "theme": "auto"
+            },
+            "category": "general",
+            "scope": "user"
+        }
+    ]
+}
+```
+
+**Supported Types**: `boolean`, `string`, `number`, `object`, `array`
+
+**Scopes**:
+- `user`: Different value per user (most common)
+- `global`: Shared across all users
+
+#### Step 2: Using with Hooks
+
+Once registered in `lifecycle_manager.py`, you can use the setting:
 
 ```tsx
 import { useSettings } from './hooks';
@@ -311,11 +364,22 @@ const MyPlugin: React.FC<PluginProps> = ({ services }) => {
 ```
 
 **Key Points**:
+- **MUST register in lifecycle_manager.py first** - This is the #1 cause of errors
 - Settings are async operations - use `async/await`
 - Settings persist across sessions
-- Use meaningful, namespaced keys (e.g., `my_plugin_theme_preference`)
-- Handle errors gracefully
-- Provide default values
+- Use meaningful, namespaced keys (e.g., `plugin_notifications_enabled`)
+- Handle errors gracefully (will throw if setting not registered)
+- Provide default values in both `settingDefinitions` AND hook calls
+- Setting IDs in code must match `id` field in `settingDefinitions`
+
+**Common Errors**:
+```
+❌ Error: Setting definition my_setting not found
+   → Solution: Add setting to settingDefinitions in lifecycle_manager.py
+
+❌ TypeError: services.settings is undefined
+   → Solution: Add 'settings' to required_services in module_data
+```
 
 ---
 
@@ -472,6 +536,264 @@ const MyPlugin: React.FC<PluginProps> = ({ services }) => {
 - Messages can be any serializable data
 - Use for plugin-to-plugin communication
 - Not for heavy data transfer
+
+---
+
+### 6. PluginState Service
+
+Provides persistent key-value storage scoped to your plugin. Store user preferences, session data, and plugin state that persists across page reloads.
+
+> **⚠️ CRITICAL REQUIREMENT**: Must call `configure()` before using any state methods!
+>
+> Attempting to save state without configuration will throw:
+> `Error: Plugin state service not configured. Call configure() first.`
+
+#### Interface
+
+```typescript
+interface PluginStateService {
+  configure?(config: {
+    pluginId: string;
+    stateStrategy?: 'session' | 'persistent';
+    preserveKeys?: string[];
+    stateSchema?: any;
+    maxStateSize?: number;
+  }): void;
+  saveState(stateData: any): Promise<void>;
+  getState(): Promise<any>;
+  clearState(): Promise<void>;
+  validateState?(state: any): boolean;
+  sanitizeState?(state: any): any;
+  onSave?(callback: (state: any) => void) => () => void;
+  onRestore?(callback: (state: any) => void) => () => void;
+  onClear?(callback: () => void) => () => void;
+}
+```
+
+#### Step 1: Configure on Component Mount
+
+**REQUIRED**: Configure the service before any state operations:
+
+```tsx
+import { useEffect } from 'react';
+
+const MyPlugin: React.FC<PluginProps> = ({ services }) => {
+  // Configure PluginState service on mount
+  useEffect(() => {
+    if (!services.pluginState?.configure) return;
+
+    try {
+      services.pluginState.configure({
+        pluginId: 'MyPlugin',                    // REQUIRED: Your plugin ID
+        stateStrategy: 'session',                // 'session' or 'persistent'
+        preserveKeys: ['userData', 'settings'],  // Keys to always preserve
+        stateSchema: {                           // Validation schema
+          userData: { type: 'object', required: false },
+          settings: { type: 'object', required: false },
+          counter: { type: 'number', default: 0 }
+        },
+        maxStateSize: 10240                      // 10KB limit
+      });
+      console.log('PluginState configured successfully');
+    } catch (err) {
+      console.error('Failed to configure PluginState:', err);
+    }
+  }, [services.pluginState]);
+
+  // ... rest of component
+};
+```
+
+**Configuration Options**:
+- `pluginId` (required): Unique identifier for your plugin
+- `stateStrategy`:
+  - `'session'`: State cleared when browser session ends
+  - `'persistent'`: State persists across browser sessions (default)
+- `preserveKeys`: Array of keys that should never be cleared
+- `stateSchema`: Validation schema for state structure
+- `maxStateSize`: Maximum state size in bytes (default: 10KB)
+
+#### Step 2: Using with Hooks
+
+Once configured, use the `usePluginState` hook:
+
+```tsx
+import { usePluginState } from './hooks';
+
+interface MyState {
+  counter: number;
+  userData: {
+    name: string;
+    preferences: string[];
+  };
+  lastUpdated: string;
+}
+
+const MyPlugin: React.FC<PluginProps> = ({ services }) => {
+  const { state, saveState, clearState, isLoading, error } = usePluginState<MyState>(
+    services.pluginState,
+    errorHandler,
+    true  // auto-load on mount
+  );
+
+  const handleSave = async () => {
+    await saveState({
+      counter: 42,
+      userData: {
+        name: 'John Doe',
+        preferences: ['Dark Mode', 'Notifications']
+      },
+      lastUpdated: new Date().toISOString()
+    });
+  };
+
+  const handleClear = async () => {
+    await clearState();
+  };
+
+  if (isLoading) return <div>Loading state...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  return (
+    <div>
+      <pre>{JSON.stringify(state, null, 2)}</pre>
+      <button onClick={handleSave} disabled={isLoading}>Save State</button>
+      <button onClick={handleClear} disabled={isLoading}>Clear State</button>
+    </div>
+  );
+};
+```
+
+#### Manual Implementation
+
+```tsx
+import { useState, useEffect } from 'react';
+
+const MyPlugin: React.FC<PluginProps> = ({ services }) => {
+  const [state, setState] = useState(null);
+
+  // Configure on mount
+  useEffect(() => {
+    if (!services.pluginState?.configure) return;
+
+    services.pluginState.configure({
+      pluginId: 'MyPlugin',
+      stateStrategy: 'persistent'
+    });
+  }, [services.pluginState]);
+
+  // Save state
+  const saveData = async () => {
+    if (!services.pluginState) return;
+
+    try {
+      await services.pluginState.saveState({
+        userId: 'user-123',
+        settings: { theme: 'dark' },
+        lastLogin: Date.now()
+      });
+      console.log('State saved');
+    } catch (error) {
+      console.error('Save failed:', error);
+    }
+  };
+
+  // Load state
+  const loadData = async () => {
+    if (!services.pluginState) return;
+
+    try {
+      const savedState = await services.pluginState.getState();
+      setState(savedState);
+      console.log('State loaded:', savedState);
+    } catch (error) {
+      console.error('Load failed:', error);
+    }
+  };
+
+  // Clear state
+  const clearData = async () => {
+    if (!services.pluginState) return;
+
+    try {
+      await services.pluginState.clearState();
+      setState(null);
+      console.log('State cleared');
+    } catch (error) {
+      console.error('Clear failed:', error);
+    }
+  };
+
+  return <div>...</div>;
+};
+```
+
+#### Event Subscriptions
+
+Subscribe to state lifecycle events:
+
+```tsx
+useEffect(() => {
+  if (!services.pluginState) return;
+
+  const cleanupFns: Array<() => void> = [];
+
+  // Listen for save events
+  if (services.pluginState.onSave) {
+    const unsubscribeSave = services.pluginState.onSave((savedState) => {
+      console.log('State was saved:', savedState);
+      showNotification('State saved successfully!');
+    });
+    cleanupFns.push(unsubscribeSave);
+  }
+
+  // Listen for restore events
+  if (services.pluginState.onRestore) {
+    const unsubscribeRestore = services.pluginState.onRestore((restoredState) => {
+      console.log('State was restored:', restoredState);
+      applyRestoredState(restoredState);
+    });
+    cleanupFns.push(unsubscribeRestore);
+  }
+
+  // Listen for clear events
+  if (services.pluginState.onClear) {
+    const unsubscribeClear = services.pluginState.onClear(() => {
+      console.log('State was cleared');
+      resetToDefaults();
+    });
+    cleanupFns.push(unsubscribeClear);
+  }
+
+  // Cleanup all subscriptions
+  return () => {
+    cleanupFns.forEach(fn => fn());
+  };
+}, [services.pluginState]);
+```
+
+**Key Points**:
+- **MUST call configure() before any state operations** - This is the #1 cause of errors
+- Configure in a `useEffect` on component mount
+- Use `usePluginState` hook for automatic loading, saving, and cleanup
+- Auto-save with debouncing: Delay saves by 1-2 seconds after last change
+- Validate before saving: Use schemas to ensure state structure integrity
+- Size limits: Keep state under 10KB for optimal performance
+- Choose strategy wisely: Use `'session'` for temporary data, `'persistent'` for long-term
+- Clear on logout: Consider clearing sensitive state when users log out
+- Version your state: Include version numbers to handle schema migrations
+
+**Common Errors**:
+```
+❌ Error: Plugin state service not configured. Call configure() first.
+   → Solution: Add configure() call in useEffect on component mount
+
+❌ TypeError: services.pluginState is undefined
+   → Solution: Add 'pluginState' to required_services in module_data
+
+❌ State size exceeds maxStateSize limit
+   → Solution: Reduce state size or increase maxStateSize in configure()
+```
 
 ---
 
@@ -646,9 +968,101 @@ useEffect(() => {
 }, [pluginId]); // Runs when pluginId changes
 ```
 
+### Settings Service: "Setting definition not found"
+
+**Problem**: `Error: Setting definition my_setting not found`
+
+**Root Cause**: Setting not registered in `lifecycle_manager.py`
+
+**Solution**:
+1. Open `lifecycle_manager.py`
+2. Find `self.plugin_data = { ... }`
+3. Add or update `settingDefinitions` array:
+```python
+"settingDefinitions": [
+    {
+        "id": "my_setting",  # Must match key used in code
+        "name": "My Setting",
+        "description": "Setting description",
+        "type": "string",    # boolean, string, number, object, array
+        "default": "default_value",
+        "category": "general",
+        "scope": "user"
+    }
+]
+```
+4. Rebuild plugin: `npm run build`
+5. Reinstall/update plugin in BrainDrive
+
+**Verification**:
+- Setting ID in code must exactly match `id` in `settingDefinitions`
+- Check for typos in setting key
+- Ensure plugin was reinstalled after adding definition
+
+### PluginState Service: "not configured"
+
+**Problem**: `Error: Plugin state service not configured. Call configure() first.`
+
+**Root Cause**: Missing `configure()` call before using state methods
+
+**Solution**:
+```tsx
+const MyPlugin: React.FC<PluginProps> = ({ services }) => {
+  // Add this useEffect at top of component
+  useEffect(() => {
+    if (!services.pluginState?.configure) return;
+
+    services.pluginState.configure({
+      pluginId: 'MyPluginId',  // Use your actual plugin ID
+      stateStrategy: 'persistent'
+    });
+  }, [services.pluginState]);
+
+  // Now you can use state methods
+  const { state, saveState } = usePluginState(services.pluginState);
+  // ...
+};
+```
+
+**Verification**:
+- `configure()` is called in `useEffect` with `[services.pluginState]` dependency
+- `configure()` is called BEFORE any `saveState()`, `getState()`, or `clearState()` calls
+- Check browser console for configuration errors
+
+### PluginState Service: State size limit exceeded
+
+**Problem**: `Error: State size exceeds maxStateSize limit`
+
+**Solutions**:
+1. **Reduce state size**: Remove unnecessary data, use references instead of full objects
+2. **Increase limit**: Adjust `maxStateSize` in configure (use sparingly):
+```tsx
+services.pluginState.configure({
+  pluginId: 'MyPlugin',
+  maxStateSize: 20480  // 20KB instead of default 10KB
+});
+```
+3. **Split state**: Use multiple keys or external storage for large data
+
+**Best Practice**: Keep plugin state under 10KB for optimal performance
+
+### Settings vs PluginState: When to use which?
+
+| Feature | Settings Service | PluginState Service |
+|---------|-----------------|---------------------|
+| **Purpose** | User preferences, config | Plugin runtime state |
+| **Registration** | Must register in lifecycle_manager.py | Must configure() on mount |
+| **Scope** | User or global | Plugin-scoped |
+| **Size Limit** | No strict limit | 10KB default |
+| **Persistence** | Always persistent | Session or persistent |
+| **Use Cases** | Theme preference, notification settings, user options | Form data, UI state, temporary cache |
+
+**Rule of Thumb**:
+- Use **Settings** for user-configurable options that should appear in settings UI
+- Use **PluginState** for internal plugin data that users don't directly configure
+
 ## Next Steps
 
 - Read [THEMING.md](./THEMING.md) for styling guidelines
 - Read [HOOKS_GUIDE.md](./HOOKS_GUIDE.md) for hooks best practices
-- Check [examples](../src/examples/) for complete implementations
 - Review the main [README.md](../README.md) for setup instructions
