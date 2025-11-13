@@ -16,7 +16,7 @@ import {
   ErrorSeverity,
   ErrorUtils
 } from './utils/errorHandling';
-import { useTheme } from './hooks';
+import { useTheme, usePageContext, useSettings } from './hooks';
 
 // TEMPLATE: Import your components here
 // import { YourComponent } from './components';
@@ -74,7 +74,6 @@ const PluginTemplateFunctional: React.FC<PluginTemplateProps> = (props) => {
   // useRef persists values across renders without causing re-renders
   const retryCountRef = useRef(0);
   const maxRetriesRef = useRef(3);
-  const pageContextUnsubscribeRef = useRef<(() => void) | null>(null);
   const errorHandlerRef = useRef<ErrorHandler | null>(null);
 
   // Initialize error handler on first render
@@ -107,6 +106,19 @@ const PluginTemplateFunctional: React.FC<PluginTemplateProps> = (props) => {
   // The useTheme hook handles all theme service integration automatically
   // This replaces the manual theme listener setup and ensures proper reactivity
   const { currentTheme } = useTheme(services.theme, errorHandler);
+
+  // The usePageContext hook handles page context service integration automatically
+  // This replaces manual subscription setup and provides automatic cleanup
+  const { pageContext, isStudioPage, pageId, pageName, pageRoute } = usePageContext(services.pageContext, errorHandler);
+
+  // The useSettings hook handles settings persistence automatically
+  // Loads settings on mount and provides easy update mechanism
+  const {
+    value: pluginConfig,
+    setValue: setPluginConfig,
+    isLoading: configLoading,
+    error: configError
+  } = useSettings(services.settings, 'plugin_template_config', {}, errorHandler);
 
   /**
    * Handle component-level errors with comprehensive error management
@@ -169,99 +181,58 @@ const PluginTemplateFunctional: React.FC<PluginTemplateProps> = (props) => {
    * Initialize BrainDrive services with comprehensive error handling
    * Class equivalent: private async initializeServices(): Promise<void> { ... }
    *
-   * NOTE: Theme service is now handled by useTheme hook above, which provides
-   * better reactivity and automatic cleanup. This ensures theme changes are
-   * reflected immediately without needing to refresh.
+   * NOTE: Core services are now handled by custom hooks:
+   * - Theme service: useTheme hook (automatic reactivity and cleanup)
+   * - Page context: usePageContext hook (automatic subscription and cleanup)
+   * - Settings: useSettings hook (automatic loading and persistence)
+   *
+   * This function is now primarily for initializing any additional custom services
+   * your plugin may need that don't have dedicated hooks yet.
    */
   const initializeServices = useCallback(async (): Promise<void> => {
     // Theme service is handled by useTheme hook - no manual setup needed!
+    // Page context service is handled by usePageContext hook - no manual setup needed!
+    // Settings service is handled by useSettings hook - no manual setup needed!
 
-    // Initialize page context service with error handling
-    await errorHandler.safeAsync(async () => {
-      if (services.pageContext) {
-        pageContextUnsubscribeRef.current = services.pageContext.onPageContextChange((context) => {
-          errorHandler.safeSync(() => {
-            console.log('PluginTemplateFunctional: Page context changed:', context);
-            // TODO: Handle page context changes if needed
-          });
-        });
-        console.log('PluginTemplateFunctional: Page context service initialized successfully');
-      } else {
-        console.warn('PluginTemplateFunctional: Page context service not available');
-      }
-    }, undefined, ErrorStrategy.FALLBACK).catch(error => {
-      throw new ServiceError(
-        'Failed to initialize page context service',
-        'pageContext',
-        'PAGE_CONTEXT_INIT_ERROR',
-        error
-      );
-    });
+    // TODO: Initialize any additional custom services your plugin needs here
+    // Example:
+    // await errorHandler.safeAsync(async () => {
+    //   if (services.api) {
+    //     // Initialize custom API connections
+    //   }
+    // }, undefined, ErrorStrategy.FALLBACK);
 
-    // Initialize settings service with comprehensive error handling
-    await errorHandler.safeAsync(async () => {
-      if (services.settings) {
-        try {
-          const savedConfig = await services.settings.getSetting?.('plugin_template_config');
-          if (savedConfig) {
-            // Validate configuration before applying
-            const validatedConfig = errorHandler.validate(
-              savedConfig,
-              [
-                (config) => typeof config === 'object' || 'Configuration must be an object',
-                (config) => config !== null || 'Configuration cannot be null'
-              ],
-              'plugin_template_config'
-            );
-
-            // TODO: Apply saved configuration
-            console.log('PluginTemplateFunctional: Loaded and validated saved config:', validatedConfig);
-          }
-          console.log('PluginTemplateFunctional: Settings service initialized successfully');
-        } catch (error) {
-          if (error instanceof ValidationError) {
-            console.error('PluginTemplateFunctional: Invalid configuration:', error);
-            // Use default configuration
-          } else {
-            throw new ServiceError(
-              'Failed to load settings',
-              'settings',
-              'SETTINGS_LOAD_ERROR',
-              error
-            );
-          }
-        }
-      } else {
-        console.warn('PluginTemplateFunctional: Settings service not available');
-      }
-    }, undefined, ErrorStrategy.FALLBACK);
-
-    // TODO: Initialize other services as needed with similar error handling patterns
     console.log('PluginTemplateFunctional: All services initialized');
-  }, [services, errorHandler]); // Dependencies: values used in the function
+  }, [errorHandler]); // Dependencies: values used in the function
 
   /**
    * Clean up services and listeners with error handling
    * Class equivalent: private cleanupServices(): void { ... }
    *
-   * NOTE: Theme service cleanup is now handled by useTheme hook automatically
+   * NOTE: Core service cleanup is now handled by custom hooks automatically:
+   * - Theme service: useTheme hook cleanup
+   * - Page context: usePageContext hook cleanup
+   * - Settings: useSettings hook (no cleanup needed)
+   *
+   * This function is now primarily for cleaning up any additional custom services.
    */
   const cleanupServices = useCallback((): void => {
     // Theme service cleanup is handled by useTheme hook - no manual cleanup needed!
+    // Page context cleanup is handled by usePageContext hook - no manual cleanup needed!
+    // Settings service has no cleanup requirements
 
-    // Clean up page context subscription
-    errorHandler.safeSync(() => {
-      if (pageContextUnsubscribeRef.current) {
-        pageContextUnsubscribeRef.current();
-        pageContextUnsubscribeRef.current = null;
-        console.log('PluginTemplateFunctional: Page context service cleaned up');
-      }
-    });
+    // TODO: Clean up any additional custom services your plugin initialized
+    // Example:
+    // errorHandler.safeSync(() => {
+    //   if (customServiceRef.current) {
+    //     customServiceRef.current.cleanup();
+    //   }
+    // });
 
     // Reset error handler state
     errorHandler.resetErrorCounts();
     console.log('PluginTemplateFunctional: All services cleaned up successfully');
-  }, [services, errorHandler]);
+  }, [errorHandler]);
 
   /**
    * Load initial data for the plugin
@@ -377,9 +348,7 @@ const PluginTemplateFunctional: React.FC<PluginTemplateProps> = (props) => {
    * Render main plugin content
    */
   const renderContent = (): JSX.Element => {
-    // Get page context information
-    const pageContext = services.pageContext?.getCurrentPageContext();
-
+    // Page context is now available from usePageContext hook
     return (
       <div className="plugin-template-content">
         <div className="plugin-header">
