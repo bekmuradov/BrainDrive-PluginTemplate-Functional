@@ -182,7 +182,7 @@ class PluginTemplateFunctionalLifecycleManager(BaseLifecycleManager):
                     "settings": {"methods": ["getSetting", "setSetting", "getSettingDefinitions"], "version": "1.0.0"},
                     "event": {"methods": ["sendMessage", "subscribeToMessages", "unsubscribeFromMessages"], "version": "1.0.0"},
                     "pageContext": {"methods": ["getCurrentPageContext", "onPageContextChange"], "version": "1.0.0"},
-                    "pluginState": {"methods": ["saveState", "getState", "clearState"], "version": "1.0.0"}
+                    "pluginState": {"methods": ["configure", "saveState", "getState", "clearState", "validateState", "sanitizeState", "onSave", "onRestore", "onClear"], "version": "1.0.0"}
                 },
                 "dependencies": [],
                 "layout": {

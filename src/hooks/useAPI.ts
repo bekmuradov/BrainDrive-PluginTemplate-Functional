@@ -88,7 +88,8 @@ export function useAPI<T = any>(
           throw new NetworkError('Invalid response format', undefined, url);
         }
 
-        const data = response.data as T;
+        // Handle both response.data and direct response
+        const data = (response.data !== undefined ? response.data : response) as T;
         setData(data);
         return data;
       } catch (err) {
@@ -121,7 +122,8 @@ export function useAPI<T = any>(
           throw new NetworkError('Invalid response format', undefined, url);
         }
 
-        const responseData = response.data as T;
+        // Handle both response.data and direct response
+        const responseData = (response.data !== undefined ? response.data : response) as T;
         setData(responseData);
         return responseData;
       } catch (err) {
@@ -154,7 +156,8 @@ export function useAPI<T = any>(
           throw new NetworkError('Invalid response format', undefined, url);
         }
 
-        const responseData = response.data as T;
+        // Handle both response.data and direct response
+        const responseData = (response.data !== undefined ? response.data : response) as T;
         setData(responseData);
         return responseData;
       } catch (err) {

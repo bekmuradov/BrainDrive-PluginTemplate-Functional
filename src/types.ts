@@ -53,6 +53,8 @@ export interface PluginStateService {
   saveState: (stateData: any) => Promise<void>;
   getState: () => Promise<any>;
   clearState: () => Promise<void>;
+  validateState?: (state: any) => boolean;
+  sanitizeState?: (state: any) => any;
   onSave?: (callback: (state: any) => void) => () => void;
   onRestore?: (callback: (state: any) => void) => () => void;
   onClear?: (callback: () => void) => () => void;

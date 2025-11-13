@@ -29,6 +29,29 @@ interface DemoState {
  * Shows how to persist plugin data across sessions with save, restore, and clear operations.
  */
 export const PluginStateServiceTab: React.FC<PluginStateServiceTabProps> = ({ services, errorHandler }) => {
+  // Configure the plugin state service on mount
+  useEffect(() => {
+    if (!services.pluginState?.configure) return;
+
+    try {
+      services.pluginState.configure({
+        pluginId: 'PluginTemplateFunctional',
+        stateStrategy: 'session', // 'session' or 'persistent'
+        preserveKeys: ['counter', 'userData', 'lastUpdated', 'sessionId'],
+        stateSchema: {
+          counter: { type: 'number', required: false, default: 0 },
+          lastUpdated: { type: 'string', required: false },
+          userData: { type: 'object', required: false },
+          sessionId: { type: 'string', required: false }
+        },
+        maxStateSize: 10240 // 10KB limit
+      });
+      console.log('PluginState service configured successfully');
+    } catch (err) {
+      console.error('Failed to configure PluginState service:', err);
+    }
+  }, [services.pluginState]);
+
   const { state, saveState, clearState, isLoading, error, isAvailable } = usePluginState<DemoState>(
     services.pluginState,
     errorHandler,
