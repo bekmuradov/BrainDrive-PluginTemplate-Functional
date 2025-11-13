@@ -116,8 +116,10 @@ class PluginTemplateFunctionalLifecycleManager(BaseLifecycleManager):
             "plugin_slug": "PluginTemplateFunctional",  # TODO: Update plugin slug
             # Update tracking fields (matching plugin model)
             "source_type": "github",  # TODO: Update if using different source
-            "source_url": "https://github.com/BrainDriveAI/BrainDrive-PluginTemplate-Functional",  # TODO: Update URL
-            "update_check_url": "https://api.github.com/repos/BrainDriveAI/BrainDrive-PluginTemplate-Functional/releases/latest",  # TODO: Update URL
+            # TODO: IMPORTANT - Update these URLs to your own GitHub repository when you fork this template!
+            # These URLs point to the official template repository and should be changed to your plugin's repo
+            "source_url": "https://github.com/bekmuradov/BrainDrive-PluginTemplate-Functional",  # TODO: Change to your repo URL
+            "update_check_url": "https://api.github.com/repos/bekmuradov/BrainDrive-PluginTemplate-Functional/releases/latest",  # TODO: Change to your repo API URL
             "last_update_check": None,
             "update_available": False,
             "latest_version": None,
