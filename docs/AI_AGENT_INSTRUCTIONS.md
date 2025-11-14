@@ -83,6 +83,28 @@ Feature 3 → Reuses patterns from 1 & 2 (even easier)
    - Each git commit message explains the "why" behind changes
    - Reference to BrainDrive-Core issue #195 for context
 
+### Compounding Documentation System
+
+This project now includes a **structured compounding documentation system** with 4 document types:
+
+1. **Architecture Decision Records (ADRs)** - `docs/decisions/`
+   - Documents WHY architectural choices were made
+   - Template: `docs/decisions/000-template.md`
+
+2. **Failure Logs** - `docs/failures/`
+   - Documents mistakes, wrong assumptions, wasted time
+   - Template: `docs/failures/000-template.md`
+
+3. **Data Quirks** - `docs/data-quirks/`
+   - Documents non-obvious data behavior
+   - Template: `docs/data-quirks/000-template.md`
+
+4. **Integration Docs** - `docs/integrations/`
+   - Documents external API/service integration details
+   - Template: `docs/integrations/000-template.md`
+
+**📖 See [COMPOUNDING_GUIDE.md](COMPOUNDING_GUIDE.md) for complete guide on using this system.**
+
 ## 🏗️ Project Architecture
 
 ### Directory Structure
@@ -893,6 +915,7 @@ When working on this template, your goals are:
    - Create reusable patterns
    - Add to existing hooks rather than creating new ones
    - Keep examples practical and copy-paste ready
+   - **AUTO-DOCUMENT decisions, failures, quirks, and integrations**
 
 3. **Enhance Learning**
    - Add interactive examples to showcase
@@ -906,6 +929,101 @@ When working on this template, your goals are:
    - Always cleanup in useEffect
    - Use CSS custom properties
    - TypeScript for everything
+
+### 🤖 Auto-Compounding: When to Create Documentation
+
+As an AI agent, you should **automatically create documentation** in these scenarios:
+
+#### Trigger 1: Made Architectural Decision
+**IF** you chose between 2+ approaches OR selected a library/framework OR changed core architecture
+**THEN** create ADR:
+```bash
+cp docs/decisions/000-template.md docs/decisions/00X-decision-name.md
+```
+
+**Example scenarios**:
+- Chose React hooks over class components → Create ADR
+- Selected webpack externals over Module Federation shared → Create ADR
+- Decided on custom hooks pattern for services → Create ADR
+
+---
+
+#### Trigger 2: Discovered Data Quirk
+**IF** data behaves unexpectedly OR service has undocumented limitation OR API returns inconsistent format
+**THEN** create Data Quirk Doc:
+```bash
+cp docs/data-quirks/000-template.md docs/data-quirks/00X-quirk-name.md
+```
+
+**Example scenarios**:
+- BrainDrive services may be undefined → Create Data Quirk
+- CSS variables auto-update with theme → Create Data Quirk
+- PluginState auto-loads on configuration → Create Data Quirk
+
+---
+
+#### Trigger 3: Hit Error or Made Mistake
+**IF** wrong assumption made (>1 hour wasted) OR approach failed (later fixed) OR unexpected error
+**THEN** create Failure Log:
+```bash
+cp docs/failures/000-template.md docs/failures/00X-failure-name.md
+```
+
+**Example scenarios**:
+- "Invalid hook call" from React duplication → Create Failure Log
+- Memory leak from missing useEffect cleanup → Create Failure Log
+- Service undefined without lifecycle_manager declaration → Create Failure Log
+
+---
+
+#### Trigger 4: Integrated External System
+**IF** connected to new API/service OR created service wrapper OR integrated BrainDrive service bridge
+**THEN** create Integration Doc:
+```bash
+cp docs/integrations/000-template.md docs/integrations/service-name.md
+```
+
+**Example scenarios**:
+- Integrated Theme Service → Create Integration Doc
+- Integrated API Service → Create Integration Doc
+- Connected to external API → Create Integration Doc
+
+---
+
+### Before Implementing Features: Check Existing Knowledge
+
+**ALWAYS search documentation before starting work**:
+
+```bash
+# 1. Check for related decisions
+grep -r "keyword" docs/decisions/
+
+# 2. Check for past failures
+grep -r "keyword" docs/failures/
+
+# 3. Check for data quirks
+grep -r "keyword" docs/data-quirks/
+
+# 4. Check integrations
+ls docs/integrations/
+```
+
+**Example workflow**:
+```
+User: "Add theme switching to the plugin"
+
+AI Agent:
+1. Search: grep -r "theme" docs/decisions/
+   → Found ADR-003 about CSS custom properties
+2. Search: grep -r "theme" docs/failures/
+   → Found Failure-002 about missing cleanup
+3. Search: grep -r "theme" docs/integrations/
+   → Found braindrive-theme-service.md (if exists)
+4. Implement using established patterns from docs
+5. If new pattern needed → Create ADR documenting approach
+```
+
+**📖 Complete compounding engineering guide**: [docs/COMPOUNDING_GUIDE.md](COMPOUNDING_GUIDE.md)
 
 ## 🔗 External Resources
 

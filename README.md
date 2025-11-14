@@ -505,6 +505,33 @@ npm run build
 
 Output will be in `dist/remoteEntry.js`
 
+## For AI Coding Agents
+
+**👋 AI Agent?** Start here: **[FOR-AI-CODING-AGENTS.md](FOR-AI-CODING-AGENTS.md)**
+
+This project uses **Compounding Engineering** - a documentation system that multiplies productivity by capturing decisions, failures, and quirks for future developers and AI agents.
+
+### Quick Reference for AI Agents
+
+**Before coding**:
+```bash
+grep -r "keyword" docs/decisions/  # Check past decisions
+grep -r "keyword" docs/failures/   # Check common mistakes
+grep -r "keyword" docs/data-quirks/ # Check data behavior
+```
+
+**Auto-document when**:
+- Made architectural decision → Create ADR in `docs/decisions/`
+- Hit error or made mistake → Create Failure Log in `docs/failures/`
+- Discovered data quirk → Create Data Quirk in `docs/data-quirks/`
+- Integrated external service → Create Integration Doc in `docs/integrations/`
+
+**Essential guides**:
+- [FOR-AI-CODING-AGENTS.md](FOR-AI-CODING-AGENTS.md) - Quick start for AI agents
+- [docs/COMPOUNDING_GUIDE.md](docs/COMPOUNDING_GUIDE.md) - Complete compounding system guide
+- [docs/AI_AGENT_INSTRUCTIONS.md](docs/AI_AGENT_INSTRUCTIONS.md) - Detailed AI instructions
+- [docs/SERVICE_BRIDGES.md](docs/SERVICE_BRIDGES.md) - BrainDrive service integration
+
 ## Need Help?
 
 - 📖 [BrainDrive Documentation](https://docs.braindrive.ai)
